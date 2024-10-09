@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MousePosition : MonoBehaviour
 {
-    public GameObject spawnCube;
+    public GameObject spawnCube, casette;
     public Vector3 screenPosition;
     public Vector3 worldPosition;
     [SerializeField] private Material findMaterial;
@@ -41,6 +41,35 @@ public class MousePosition : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, layerToHit))
         {
             worldPosition = hitInfo.point;
+
+            if (hitInfo.collider.CompareTag("PickUp"))
+            {
+                GameObject objectPickUp = hitInfo.collider.gameObject;
+                Debug.Log("CAN pickup");
+            }
+            if (hitInfo.collider.CompareTag("Interact"))
+            {
+                GameObject interact = hitInfo.collider.gameObject;
+                Debug.Log("CAN interact!");
+            }
+            if (hitInfo.collider.CompareTag("RADIO"))
+            {
+                GameObject radio = hitInfo.collider.gameObject;
+                //Debug.Log("InsertMusic");
+                if (casette != null)
+                {
+                    if (holdClick && casette.gameObject.TryGetComponent<InteractableCasette>(out InteractableCasette script))
+                    {
+                        if (script.isPickedUp)
+                        {
+                            AudioSource radioAccess = radio.GetComponent<AudioSource>();
+                            radioAccess.Play();
+                            Destroy(casette);
+                            Debug.Log("Play song");
+                        }
+                    }
+                }
+            }
         }
         transform.position = worldPosition;
     }
