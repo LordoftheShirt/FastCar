@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class MousePosition : MonoBehaviour
 {
-    public GameObject spawnCube, casette;
+    [SerializeField] Taskmaster taskmasterScript;
+    public GameObject spawnCube, spawnWeinerBröd, casette, taskmasterObject, radioWithInstruments;
+    private GameObject radio;
+    private AudioSource radioAccess;
     public Vector3 screenPosition;
     public Vector3 worldPosition;
     [SerializeField] private Material findMaterial;
@@ -17,9 +20,6 @@ public class MousePosition : MonoBehaviour
     // 2: Thése variables pair with method 2. Not in use.
     public LayerMask layerToHit;
     public Ray ray;
-
-
-
     void Update()
     {
         screenPosition = Input.mousePosition;
@@ -45,16 +45,16 @@ public class MousePosition : MonoBehaviour
             if (hitInfo.collider.CompareTag("PickUp"))
             {
                 GameObject objectPickUp = hitInfo.collider.gameObject;
-                Debug.Log("CAN pickup");
+                //Debug.Log("CAN pickup");
             }
             if (hitInfo.collider.CompareTag("Interact"))
             {
                 GameObject interact = hitInfo.collider.gameObject;
-                Debug.Log("CAN interact!");
+                //Debug.Log("CAN interact!");
             }
             if (hitInfo.collider.CompareTag("RADIO"))
             {
-                GameObject radio = hitInfo.collider.gameObject;
+                radio = hitInfo.collider.gameObject;
                 //Debug.Log("InsertMusic");
                 if (casette != null)
                 {
@@ -62,10 +62,16 @@ public class MousePosition : MonoBehaviour
                     {
                         if (script.isPickedUp)
                         {
-                            AudioSource radioAccess = radio.GetComponent<AudioSource>();
+                            radioAccess = radio.GetComponent<AudioSource>();
                             radioAccess.Play();
                             Destroy(casette);
-                            Debug.Log("Play song");
+                            taskmasterScript = taskmasterObject.GetComponent<Taskmaster>();
+
+                            radioAccess = radioWithInstruments.GetComponent<AudioSource>();
+                            radioAccess.Play();
+
+                            taskmasterScript.StartRadioCompleted();
+                            //Debug.Log("Play song");
                         }
                     }
                 }
@@ -84,6 +90,14 @@ public class MousePosition : MonoBehaviour
         {
             findMaterial.color = originalColour;
         }
+    }
+
+    public void TurnOffMusic()
+    {
+        radioAccess.Stop();
+
+        radioAccess = radio.GetComponent<AudioSource>();
+        radioAccess.Stop();
     }
 }
 

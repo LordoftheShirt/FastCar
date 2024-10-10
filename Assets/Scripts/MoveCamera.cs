@@ -8,6 +8,7 @@ public class MoveCamera : MonoBehaviour
 
     void Update()
     {
+        if (PlayerCam3D.cameraLock == false)
         transform.position = cameraPosition.position;
     }
 }

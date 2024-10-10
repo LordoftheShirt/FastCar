@@ -7,6 +7,8 @@ public class PlayerCam3D : MonoBehaviour
     public float sensX;
     public float sensY;
 
+    static public bool cameraLock = false;
+
     public Transform orientation;
 
     float xRotation;
@@ -21,17 +23,20 @@ public class PlayerCam3D : MonoBehaviour
 
     private void Update()
     {
-        // Records input of mouse movement of X and Y axis.
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
+        if (!cameraLock)
+        {
+            // Records input of mouse movement of X and Y axis.
+            float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
+            float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
 
-        // The fuck?
-        yRotation += mouseX;
+            // The fuck?
+            yRotation += mouseX;
 
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
     }
 }

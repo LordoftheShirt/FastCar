@@ -18,6 +18,7 @@ public class PlayerMovement3D : MonoBehaviour
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode crouchKey = KeyCode.LeftControl, C;
+    public KeyCode changeMode = KeyCode.E;
 
     [Header("Crouching")]
     public float crouchSpeed;
